@@ -8,86 +8,112 @@ iv. Remove an element from the end of the doubly linked list
 
 
 
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.prev = None
-        self.next = None
+#include <iostream>
 
-class DoublyLinkedList:
-    def __init__(self):
-        self.head = None
-        self.tail = None
+class Node {
+public:
+    int data;
+    Node* prev;
+    Node* next;
+    Node(int value) : data(value), prev(nullptr), next(nullptr) {}
+};
 
-    # Insert an element at the beginning of the doubly linked list
-    def insert_at_beginning(self, data):
-        new_node = Node(data)
-        if not self.head:
-            self.head = new_node
-            self.tail = new_node
-        else:
-            new_node.next = self.head
-            self.head.prev = new_node
-            self.head = new_node
+class DoublyLinkedList {
+private:
+    Node* head;
+    Node* tail;
 
-    # Insert an element at the end of the doubly linked list
-    def insert_at_end(self, data):
-        new_node = Node(data)
-        if not self.head:
-            self.head = new_node
-            self.tail = new_node
-        else:
-            new_node.prev = self.tail
-            self.tail.next = new_node
-            self.tail = new_node
+public:
+    DoublyLinkedList() : head(nullptr), tail(nullptr) {}
 
-    # Remove an element from the beginning of the doubly linked list
-    def remove_from_beginning(self):
-        if not self.head:
-            print("List is empty")
-        else:
-            if self.head == self.tail:
-                self.head = None
-                self.tail = None
-            else:
-                self.head = self.head.next
-                self.head.prev = None
+    // Insert an element at the beginning of the doubly linked list
+    void insert_at_beginning(int data) {
+        Node* new_node = new Node(data);
+        if (!head) {
+            head = new_node;
+            tail = new_node;
+        } else {
+            new_node->next = head;
+            head->prev = new_node;
+            head = new_node;
+        }
+    }
 
-    # Remove an element from the end of the doubly linked list
-    def remove_from_end(self):
-        if not self.head:
-            print("List is empty")
-        else:
-            if self.head == self.tail:
-                self.head = None
-                self.tail = None
-            else:
-                self.tail = self.tail.prev
-                self.tail.next = None
+    // Insert an element at the end of the doubly linked list
+    void insert_at_end(int data) {
+        Node* new_node = new Node(data);
+        if (!head) {
+            head = new_node;
+            tail = new_node;
+        } else {
+            new_node->prev = tail;
+            tail->next = new_node;
+            tail = new_node;
+        }
+    }
 
-    def display(self):
-        if not self.head:
-            print("List is empty")
-        else:
-            current = self.head
-            while current:
-                print(current.data, end=' ')
-                current = current.next
-            print()
+    // Remove an element from the beginning of the doubly linked list
+    void remove_from_beginning() {
+        if (!head) {
+            std::cout << "List is empty" << std::endl;
+        } else {
+            if (head == tail) {
+                delete head;
+                head = nullptr;
+                tail = nullptr;
+            } else {
+                head = head->next;
+                delete head->prev;
+                head->prev = nullptr;
+            }
+        }
+    }
 
-# Example usage
-dll = DoublyLinkedList()
-dll.insert_at_beginning(1)
-dll.insert_at_end(2)
-dll.insert_at_end(3)
-dll.display()
+    // Remove an element from the end of the doubly linked list
+    void remove_from_end() {
+        if (!head) {
+            std::cout << "List is empty" << std::endl;
+        } else {
+            if (head == tail) {
+                delete tail;
+                head = nullptr;
+                tail = nullptr;
+            } else {
+                tail = tail->prev;
+                delete tail->next;
+                tail->next = nullptr;
+            }
+        }
+    }
 
-dll.remove_from_beginning()
-print("After removing from the beginning:")
-dll.display()
+    void display() {
+        if (!head) {
+            std::cout << "List is empty" << std::endl;
+        } else {
+            Node* current = head;
+            while (current) {
+                std::cout << current->data << " ";
+                current = current->next;
+            }
+            std::cout << std::endl;
+        }
+    }
+};
 
-dll.remove_from_end()
-print("After removing from the end:")
-dll.display()
+int main() {
+    DoublyLinkedList dll;
+    dll.insert_at_beginning(1);
+    dll.insert_at_end(2);
+    dll.insert_at_end(3);
+    dll.display();
 
+    dll.remove_from_beginning();
+    std::cout << "After removing from the beginning:" << std::endl;
+    dll.display();
 
+    dll.remove_from_end();
+    std::cout << "After removing from the end:" << std::endl;
+    dll.display();
+
+    return 0;
+}
