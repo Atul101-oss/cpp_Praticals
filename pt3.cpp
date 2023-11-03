@@ -1,84 +1,115 @@
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.next = None
+#include <iostream>
 
-class CircularLinkedList:
-    def __init__(self):
-        self.head = None
+class Node {
+public:
+    int data;
+    Node* next;
+    Node(int value) : data(value), next(nullptr) {}
+};
 
-    # Insert an element at the end of the list
-    def insert(self, data):
-        new_node = Node(data)
-        if not self.head:
-            self.head = new_node
-            new_node.next = self.head
-        else:
-            temp = self.head
-            while temp.next != self.head:
-                temp = temp.next
-            temp.next = new_node
-            new_node.next = self.head
+class CircularLinkedList {
+private:
+    Node* head;
 
-    # Remove an element from the list
-    def remove(self, data):
-        if not self.head:
-            return
-        if self.head.data == data:
-            if self.head.next == self.head:
-                self.head = None
-            else:
-                temp = self.head
-                while temp.next != self.head:
-                    temp = temp.next
-                temp.next = self.head.next
-                self.head = self.head.next
-        else:
-            current = self.head
-            prev = None
-            while current.data != data and current.next != self.head:
-                prev = current
-                current = current.next
-            if current.data == data:
-                prev.next = current.next
-            else:
-                print(f"{data} not found in the list")
+public:
+    CircularLinkedList() : head(nullptr) {}
 
-    # Search for an element x in the list and return its pointer
-    def search(self, data):
-        if not self.head:
-            return None
-        current = self.head
-        while current.data != data and current.next != self.head:
-            current = current.next
-        if current.data == data:
-            return current
-        else:
-            return None
+    // Insert an element in the list
+    void insert(int data) {
+        Node* new_node = new Node(data);
+        if (!head) {
+            head = new_node;
+            new_node->next = head;
+        } else {
+            Node* temp = head;
+            while (temp->next != head) {
+                temp = temp->next;
+            }
+            temp->next = new_node;
+            new_node->next = head;
+        }
+    }
 
-    def display(self):
-        if not self.head:
-            print("List is empty")
-        else:
-            temp = self.head
-            while True:
-                print(temp.data, end=' ')
-                temp = temp.next
-                if temp == self.head:
-                    break
-            print()
+    // Remove an element from the list
+    void remove(int data) {
+        if (!head) {
+            std::cout << "List is empty" << std::endl;
+            return;
+        }
+        if (head->data == data) {
+            if (head->next == head) {
+                delete head;
+                head = nullptr;
+            } else {
+                Node* temp = head;
+                while (temp->next != head) {
+                    temp = temp->next;
+                }
+                temp->next = head->next;
+                Node* temp2 = head;
+                head = head->next;
+                delete temp2;
+            }
+        } else {
+            Node* current = head;
+            Node* prev = nullptr;
+            while (current->data != data && current->next != head) {
+                prev = current;
+                current = current->next;
+            }
+            if (current->data == data) {
+                prev->next = current->next;
+                delete current;
+            } else {
+                std::cout << data << " not found in the list" << std::endl;
+            }
+        }
+    }
 
-# Example usage
-cll = CircularLinkedList()
-cll.insert(1)
-cll.insert(2)
-cll.insert(3)
-cll.display()
+    // Search for an element x in the list and return its pointer
+    Node* search(int data) {
+        if (!head) {
+            return nullptr;
+        }
+        Node* current = head;
+        do {
+            if (current->data == data) {
+                return current;
+            }
+            current = current->next;
+        } while (current != head);
+        return nullptr;
+    }
 
-node_to_remove = cll.search(2)
-if node_to_remove:
-    cll.remove(2)
-    print("After removing 2:")
-    cll.display()
-else:
-    print("Element not found in the list")
+    void display() {
+        if (!head) {
+            std::cout << "List is empty" << std::endl;
+        } else {
+            Node* temp = head;
+            do {
+                std::cout << temp->data << " ";
+                temp = temp->next;
+            } while (temp != head);
+            std::cout << std::endl;
+        }
+    }
+};
+
+int main() {
+    CircularLinkedList cll;
+    cll.insert(1);
+    cll.insert(2);
+    cll.insert(3);
+    cll.display();
+
+    Node* node_to_remove = cll.search(2);
+    if (node_to_remove) {
+        cll.remove(2);
+        std::cout << "After removing 2:" << std::endl;
+        cll.display();
+    } else {
+        std::cout << "Element not found in the list" << std::endl;
+    }
+
+    return 0;
+}
