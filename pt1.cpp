@@ -1,90 +1,140 @@
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.next = None
+#include <iostream>
 
-class SinglyLinkedList:
-    def __init__(self):
-        self.head = None
+class Node {
+public:
+    int data;
+    Node* next;
 
-    def insert_at_beginning(self, data):
-        new_node = Node(data)
-        new_node.next = self.head
-        self.head = new_node
+    Node(int value) : data(value), next(nullptr) {}
+};
 
-    def insert_at_position(self, data, position):
-        if position < 1:
-            print("Invalid position")
-            return
-        new_node = Node(data)
-        if position == 1:
-            new_node.next = self.head
-            self.head = new_node
-            return
-        current = self.head
-        count = 1
-        while current and count < position - 1:
-            current = current.next
-            count += 1
-        if current is None:
-            print("Position out of range")
-        else:
-            new_node.next = current.next
-            current.next = new_node
+class SinglyLinkedList {
+private:
+    Node* head;
 
-    def remove_from_beginning(self):
-        if self.head:
-            self.head = self.head.next
-        else:
-            print("List is empty")
+public:
+    SinglyLinkedList() : head(nullptr) {}
 
-    def remove_from_position(self, position):
-        if position < 1 or not self.head:
-            print("Invalid position or empty list")
-            return
-        if position == 1:
-            self.head = self.head.next
-            return
-        current = self.head
-        count = 1
-        while current and count < position - 1:
-            current = current.next
-            count += 1
-        if current is None or current.next is None:
-            print("Position out of range")
-        else:
-            current.next = current.next.next
+    void insert_at_beginning(int data) {
+        Node* new_node = new Node(data);
+        new_node->next = head;
+        head = new_node;
+    }
 
-    def search(self, target):
-        current = self.head
-        while current:
-            if current.data == target:
-                return current
-            current = current.next
-        return None
+    void insert_at_position(int data, int position) {
+        if (position < 1) {
+            std::cout << "Invalid position" << std::endl;
+            return;
+        }
 
-    def display(self):
-        current = self.head
-        while current:
-            print(current.data, end=" -> ")
-            current = current.next
-        print("None")
+        Node* new_node = new Node(data);
+        if (position == 1) {
+            new_node->next = head;
+            head = new_node;
+            return;
+        }
 
+        Node* current = head;
+        int count = 1;
+        while (current && count < position - 1) {
+            current = current->next;
+            count++;
+        }
 
-# Example usage:
-linked_list = SinglyLinkedList()
-linked_list.insert_at_beginning(3)
-linked_list.insert_at_beginning(2)
-linked_list.insert_at_beginning(1)
-linked_list.insert_at_position(4, 2)
-linked_list.display()  # Output: 1 -> 4 -> 2 -> 3 -> None
+        if (!current) {
+            std::cout << "Position out of range" << std::endl;
+        } else {
+            new_node->next = current->next;
+            current->next = new_node;
+        }
+    }
 
-linked_list.remove_from_beginning()
-linked_list.remove_from_position(2)
-linked_list.display()  # Output: 4 -> 3 -> None
+    void remove_from_beginning() {
+        if (head) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        } else {
+            std::cout << "List is empty" << std::endl;
+        }
+    }
 
-search_result = linked_list.search(2)
-if search_result:
-    print("Found:", search_result.data)
-else:
-    print("Not Found")
+    void remove_from_position(int position) {
+        if (position < 1 || !head) {
+            std::cout << "Invalid position or empty list" << std::endl;
+            return;
+        }
+
+        if (position == 1) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        Node* current = head;
+        int count = 1;
+        while (current && count < position - 1) {
+            current = current->next;
+            count++;
+        }
+
+        if (!current || !current->next) {
+            std::cout << "Position out of range" << std::endl;
+        } else {
+            Node* temp = current->next;
+            current->next = current->next->next;
+            delete temp;
+        }
+    }
+
+    Node* search(int target) {
+        Node* current = head;
+        while (current) {
+            if (current->data == target) {
+                return current;
+            }
+            current = current->next;
+        }
+        return nullptr;
+    }
+
+    void display() {
+        Node* current = head;
+        while (current) {
+            std::cout << current->data << " -> ";
+            current = current->next;
+        }
+        std::cout << "nullptr" << std::endl;
+    }
+
+    ~SinglyLinkedList() {
+        while (head) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    SinglyLinkedList linked_list;
+    linked_list.insert_at_beginning(3);
+    linked_list.insert_at_beginning(2);
+    linked_list.insert_at_beginning(1);
+    linked_list.insert_at_position(4, 2);
+    linked_list.display();  // Output: 1 -> 4 -> 2 -> 3 -> nullptr
+
+    linked_list.remove_from_beginning();
+    linked_list.remove_from_position(2);
+    linked_list.display();  // Output: 4 -> 3 -> nullptr
+
+    Node* search_result = linked_list.search(2);
+    if (search_result) {
+        std::cout << "Found: " << search_result->data << std::endl;
+    } else {
+        std::cout << "Not Found" << std::endl;
+    }
+
+    return 0;
+}
