@@ -1,14 +1,14 @@
+/*
 Write a program to implement doubly linked list as an ADT that supports the following op-
 erations:
 i. Insert an element x at the beginning of the doubly linked list
 ii. Insert an element x at the end of the doubly linked list
 iii. Remove an element from the beginning of the doubly linked list
 iv. Remove an element from the end of the doubly linked list
-
-
-
+*/
 
 #include <iostream>
+using namespace std;
 
 class Node {
 public:
@@ -55,7 +55,7 @@ public:
     // Remove an element from the beginning of the doubly linked list
     void remove_from_beginning() {
         if (!head) {
-            std::cout << "List is empty" << std::endl;
+            cout << "List is empty" << endl;
         } else {
             if (head == tail) {
                 delete head;
@@ -72,7 +72,7 @@ public:
     // Remove an element from the end of the doubly linked list
     void remove_from_end() {
         if (!head) {
-            std::cout << "List is empty" << std::endl;
+            cout << "List is empty" << endl;
         } else {
             if (head == tail) {
                 delete tail;
@@ -88,14 +88,14 @@ public:
 
     void display() {
         if (!head) {
-            std::cout << "List is empty" << std::endl;
+            cout << "List is empty" << endl;
         } else {
             Node* current = head;
             while (current) {
-                std::cout << current->data << " ";
+                cout << current->data << "->";
                 current = current->next;
             }
-            std::cout << std::endl;
+            cout <<"NULL"<< endl;
         }
     }
 };
@@ -108,11 +108,11 @@ int main() {
     dll.display();
 
     dll.remove_from_beginning();
-    std::cout << "After removing from the beginning:" << std::endl;
+    cout << "After removing from the beginning:" << endl;
     dll.display();
 
     dll.remove_from_end();
-    std::cout << "After removing from the end:" << std::endl;
+    cout << "After removing from the end:" << endl;
     dll.display();
 
     return 0;

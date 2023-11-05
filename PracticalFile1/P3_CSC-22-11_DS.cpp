@@ -1,4 +1,5 @@
 #include <iostream>
+using namespace std;
 
 class Node {
 public:
@@ -33,7 +34,7 @@ public:
     // Remove an element from the list
     void remove(int data) {
         if (!head) {
-            std::cout << "List is empty" << std::endl;
+            cout << "List is empty" << endl;
             return;
         }
         if (head->data == data) {
@@ -61,7 +62,7 @@ public:
                 prev->next = current->next;
                 delete current;
             } else {
-                std::cout << data << " not found in the list" << std::endl;
+                cout << data << " not found in the list" << endl;
             }
         }
     }
@@ -74,23 +75,25 @@ public:
         Node* current = head;
         do {
             if (current->data == data) {
+                cout << data<<" fount at address : "<< current << endl;
                 return current;
             }
             current = current->next;
         } while (current != head);
+        cout << data << " doesn't found !" << endl;
         return nullptr;
     }
 
     void display() {
         if (!head) {
-            std::cout << "List is empty" << std::endl;
+            cout << "List is empty" << endl;
         } else {
             Node* temp = head;
             do {
-                std::cout << temp->data << " ";
+                std::cout << temp->data << "->";
                 temp = temp->next;
             } while (temp != head);
-            std::cout << std::endl;
+            cout <<"[head]"<< endl;
         }
     }
 };
@@ -101,15 +104,11 @@ int main() {
     cll.insert(2);
     cll.insert(3);
     cll.display();
-
-    Node* node_to_remove = cll.search(2);
-    if (node_to_remove) {
-        cll.remove(2);
-        std::cout << "After removing 2:" << std::endl;
-        cll.display();
-    } else {
-        std::cout << "Element not found in the list" << std::endl;
-    }
+    cll.search(4);
+    cll.search(2);
+    cout << "After remove 2" <<endl;
+    cll.remove(2);
+    cll.display();
 
     return 0;
 }

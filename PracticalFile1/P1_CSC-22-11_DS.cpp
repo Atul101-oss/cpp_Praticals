@@ -1,4 +1,5 @@
 #include <iostream>
+using namespace std;
 
 class Node {
 public:
@@ -23,7 +24,7 @@ public:
 
     void insert_at_position(int data, int position) {
         if (position < 1) {
-            std::cout << "Invalid position" << std::endl;
+            cout << "Invalid position" << endl;
             return;
         }
 
@@ -42,7 +43,7 @@ public:
         }
 
         if (!current) {
-            std::cout << "Position out of range" << std::endl;
+            cout << "Position out of range" << endl;
         } else {
             new_node->next = current->next;
             current->next = new_node;
@@ -55,13 +56,13 @@ public:
             head = head->next;
             delete temp;
         } else {
-            std::cout << "List is empty" << std::endl;
+            cout << "List is empty" << std::endl;
         }
     }
 
     void remove_from_position(int position) {
         if (position < 1 || !head) {
-            std::cout << "Invalid position or empty list" << std::endl;
+            cout << "Invalid position or empty list" << endl;
             return;
         }
 
@@ -80,7 +81,7 @@ public:
         }
 
         if (!current || !current->next) {
-            std::cout << "Position out of range" << std::endl;
+            cout << "Position out of range" << endl;
         } else {
             Node* temp = current->next;
             current->next = current->next->next;
@@ -102,10 +103,10 @@ public:
     void display() {
         Node* current = head;
         while (current) {
-            std::cout << current->data << " -> ";
+            cout << current->data << " -> ";
             current = current->next;
         }
-        std::cout << "nullptr" << std::endl;
+        cout << "nullptr" << endl;
     }
 
     ~SinglyLinkedList() {
@@ -123,17 +124,17 @@ int main() {
     linked_list.insert_at_beginning(2);
     linked_list.insert_at_beginning(1);
     linked_list.insert_at_position(4, 2);
-    linked_list.display();  // Output: 1 -> 4 -> 2 -> 3 -> nullptr
+    linked_list.display();
 
     linked_list.remove_from_beginning();
     linked_list.remove_from_position(2);
-    linked_list.display();  // Output: 4 -> 3 -> nullptr
+    linked_list.display();
 
     Node* search_result = linked_list.search(2);
     if (search_result) {
-        std::cout << "Found: " << search_result->data << std::endl;
+        cout << "Found: " << search_result->data << endl;
     } else {
-        std::cout << "Not Found" << std::endl;
+        cout << "Not Found" << endl;
     }
 
     return 0;
