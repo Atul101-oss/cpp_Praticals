@@ -1,2 +1,110 @@
 6. Write a program to implement Binary Search Tree as an ADT which supports the following 
 operations: i. Insert an element x ii. Delete an element x iii. Search for an element x in the BST  iv. Display the elements of the BST in preorder, inorder, and postorder traversal
+
+
+
+
+
+
+class TreeNode:
+    def __init__(self, key):
+        self.key = key
+        self.left = None
+        self.right = None
+
+class BinarySearchTree:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, key):
+        self.root = self._insert(self.root, key)
+
+    def _insert(self, root, key):
+        if root is None:
+            return TreeNode(key)
+        if key < root.key:
+            root.left = self._insert(root.left, key)
+        elif key > root.key:
+            root.right = self._insert(root.right, key)
+        return root
+
+    def delete(self, key):
+        self.root = self._delete(self.root, key)
+
+    def _delete(self, root, key):
+        if root is None:
+            return root
+        if key < root.key:
+            root.left = self._delete(root.left, key)
+        elif key > root.key:
+            root.right = self._delete(root.right, key)
+        else:
+            if root.left is None:
+                return root.right
+            elif root.right is None:
+                return root.left
+            root.key = self._get_min_value(root.right)
+            root.right = self._delete(root.right, root.key)
+        return root
+
+    def _get_min_value(self, root):
+        while root.left is not None:
+            root = root.left
+        return root.key
+
+    def search(self, key):
+        return self._search(self.root, key)
+
+    def _search(self, root, key):
+        if root is None or root.key == key:
+            return root
+        if key < root.key:
+            return self._search(root.left, key)
+        return self._search(root.right, key)
+
+    def preorder_traversal(self):
+        result = []
+        self._preorder(self.root, result)
+        return result
+
+    def _preorder(self, root, result):
+        if root:
+            result.append(root.key)
+            self._preorder(root.left, result)
+            self._preorder(root.right, result)
+
+    def inorder_traversal(self):
+        result = []
+        self._inorder(self.root, result)
+        return result
+
+    def _inorder(self, root, result):
+        if root:
+            self._inorder(root.left, result)
+            result.append(root.key)
+            self._inorder(root.right, result)
+
+    def postorder_traversal(self):
+        result = []
+        self._postorder(self.root, result)
+        return result
+
+    def _postorder(self, root, result):
+        if root:
+            self._postorder(root.left, result)
+            self._postorder(root.right, result)
+            result.append(root.key)
+
+# Example usage:
+bst = BinarySearchTree()
+elements = [8, 3, 10, 1, 6, 9, 12]
+
+for element in elements:
+    bst.insert(element)
+
+print("Inorder Traversal:", bst.inorder_traversal())
+print("Preorder Traversal:", bst.preorder_traversal())
+print("Postorder Traversal:", bst.postorder_traversal())
+
+bst.delete(6)
+print("After deleting 6:", bst.inorder_traversal())
