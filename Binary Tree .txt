@@ -6,105 +6,152 @@ operations: i. Insert an element x ii. Delete an element x iii. Search for an el
 
 
 
-class TreeNode:
-    def __init__(self, key):
-        self.key = key
-        self.left = None
-        self.right = None
+#include <iostream>
+using namespace std;
 
-class BinarySearchTree:
-    def __init__(self):
-        self.root = None
+class TreeNode {
+public:
+    int key;
+    TreeNode* left;
+    TreeNode* right;
 
-    def insert(self, key):
-        self.root = self._insert(self.root, key)
+    TreeNode(int value) : key(value), left(nullptr), right(nullptr) {}
+};
 
-    def _insert(self, root, key):
-        if root is None:
-            return TreeNode(key)
-        if key < root.key:
-            root.left = self._insert(root.left, key)
-        elif key > root.key:
-            root.right = self._insert(root.right, key)
-        return root
+class BinarySearchTree {
+private:
+    TreeNode* root;
 
-    def delete(self, key):
-        self.root = self._delete(self.root, key)
+    TreeNode* insert(TreeNode* root, int key) {
+        if (root == nullptr)
+            return new TreeNode(key);
 
-    def _delete(self, root, key):
-        if root is None:
-            return root
-        if key < root.key:
-            root.left = self._delete(root.left, key)
-        elif key > root.key:
-            root.right = self._delete(root.right, key)
-        else:
-            if root.left is None:
-                return root.right
-            elif root.right is None:
-                return root.left
-            root.key = self._get_min_value(root.right)
-            root.right = self._delete(root.right, root.key)
-        return root
+        if (key < root->key)
+            root->left = insert(root->left, key);
+        else if (key > root->key)
+            root->right = insert(root->right, key);
 
-    def _get_min_value(self, root):
-        while root.left is not None:
-            root = root.left
-        return root.key
+        return root;
+    }
 
-    def search(self, key):
-        return self._search(self.root, key)
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if (root == nullptr)
+            return root;
 
-    def _search(self, root, key):
-        if root is None or root.key == key:
-            return root
-        if key < root.key:
-            return self._search(root.left, key)
-        return self._search(root.right, key)
+        if (key < root->key)
+            root->left = deleteNode(root->left, key);
+        else if (key > root->key)
+            root->right = deleteNode(root->right, key);
+        else {
+            if (root->left == nullptr) {
+                TreeNode* temp = root->right;
+                delete root;
+                return temp;
+            } else if (root->right == nullptr) {
+                TreeNode* temp = root->left;
+                delete root;
+                return temp;
+            }
 
-    def preorder_traversal(self):
-        result = []
-        self._preorder(self.root, result)
-        return result
+            root->key = minValue(root->right);
+            root->right = deleteNode(root->right, root->key);
+        }
 
-    def _preorder(self, root, result):
-        if root:
-            result.append(root.key)
-            self._preorder(root.left, result)
-            self._preorder(root.right, result)
+        return root;
+    }
 
-    def inorder_traversal(self):
-        result = []
-        self._inorder(self.root, result)
-        return result
+    int minValue(TreeNode* root) {
+        int minValue = root->key;
+        while (root->left != nullptr) {
+            minValue = root->left->key;
+            root = root->left;
+        }
+        return minValue;
+    }
 
-    def _inorder(self, root, result):
-        if root:
-            self._inorder(root.left, result)
-            result.append(root.key)
-            self._inorder(root.right, result)
+    TreeNode* search(TreeNode* root, int key) {
+        if (root == nullptr || root->key == key)
+            return root;
 
-    def postorder_traversal(self):
-        result = []
-        self._postorder(self.root, result)
-        return result
+        if (key < root->key)
+            return search(root->left, key);
 
-    def _postorder(self, root, result):
-        if root:
-            self._postorder(root.left, result)
-            self._postorder(root.right, result)
-            result.append(root.key)
+        return search(root->right, key);
+    }
 
-# Example usage:
-bst = BinarySearchTree()
-elements = [8, 3, 10, 1, 6, 9, 12]
+    void inorderTraversal(TreeNode* root) {
+        if (root != nullptr) {
+            inorderTraversal(root->left);
+            cout << root->key << " ";
+            inorderTraversal(root->right);
+        }
+    }
 
-for element in elements:
-    bst.insert(element)
+    void preorderTraversal(TreeNode* root) {
+        if (root != nullptr) {
+            cout << root->key << " ";
+            preorderTraversal(root->left);
+            preorderTraversal(root->right);
+        }
+    }
 
-print("Inorder Traversal:", bst.inorder_traversal())
-print("Preorder Traversal:", bst.preorder_traversal())
-print("Postorder Traversal:", bst.postorder_traversal())
+    void postorderTraversal(TreeNode* root) {
+        if (root != nullptr) {
+            postorderTraversal(root->left);
+            postorderTraversal(root->right);
+            cout << root->key << " ";
+        }
+    }
 
-bst.delete(6)
-print("After deleting 6:", bst.inorder_traversal())
+public:
+    BinarySearchTree() : root(nullptr) {}
+
+    void insert(int key) {
+        root = insert(root, key);
+    }
+
+    void deleteNode(int key) {
+        root = deleteNode(root, key);
+    }
+
+    bool search(int key) {
+        return search(root, key) != nullptr;
+    }
+
+    void displayInorder() {
+        cout << "Inorder Traversal: ";
+        inorderTraversal(root);
+        cout << endl;
+    }
+
+    void displayPreorder() {
+        cout << "Preorder Traversal: ";
+        preorderTraversal(root);
+        cout << endl;
+    }
+
+    void displayPostorder() {
+        cout << "Postorder Traversal: ";
+        postorderTraversal(root);
+        cout << endl;
+    }
+};
+
+int main() {
+    BinarySearchTree bst;
+    int elements[] = {8, 3, 10, 1, 6, 9, 12};
+
+    for (int element : elements) {
+        bst.insert(element);
+    }
+
+    bst.displayInorder();
+    bst.displayPreorder();
+    bst.displayPostorder();
+
+    bst.deleteNode(6);
+    cout << "After deleting 6:" << endl;
+    bst.displayInorder();
+
+    return 0;
+}
