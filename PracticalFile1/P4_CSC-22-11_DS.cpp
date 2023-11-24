@@ -1,47 +1,10 @@
 #include <iostream>
 #include <stack>
 #include <sstream>
-
 using namespace std;
 
-class Stack {
-public:
-    bool isEmpty() const {
-        return items.empty();
-    }
-
-    void push(int item) {
-        items.push(item);
-    }
-
-    int pop() {
-        if (!isEmpty()) {
-            int top = items.top();
-            items.pop();
-            return top;
-        } else {
-            throw runtime_error("pop from empty stack");
-        }
-    }
-
-    int peek() const {
-        if (!isEmpty()) {
-            return items.top();
-        } else {
-            throw runtime_error("peek from empty stack");
-        }
-    }
-
-    int size() const {
-        return items.size();
-    }
-
-private:
-    stack<int> items;
-};
-
-int performOperation(char op, int operand1, int operand2) {
-    switch (op) {
+int performPostFix(char operator1, int operand1, int operand2){
+    switch(operator1){
         case '+':
             return operand1 + operand2;
         case '-':
@@ -49,44 +12,42 @@ int performOperation(char op, int operand1, int operand2) {
         case '*':
             return operand1 * operand2;
         case '/':
-            if (operand2 != 0) {
-                return operand1 / operand2;
-            } else {
-                throw runtime_error("Division by zero");
-            }
-        default:
-            throw runtime_error("Invalid operator");
+            if (operand2 != 0)
+                return operand1/operand2;
+            else
+                throw runtime_error("Division by 0");
+        
+        default :
+            throw runtime_error("invalid operator");
     }
 }
 
-int evaluatePostfix(const string& expression) {
-    Stack stack;
-    istringstream iss(expression);
-
-    string token;
-    while (iss >> token) {
-        if (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1]))) {
-            stack.push(stoi(token));
-        } else {
-            int operand2 = stack.pop();
-            int operand1 = stack.pop();
-            int result = performOperation(token[0], operand1, operand2);
-            stack.push(result);
+int evaluatePostFix(string expration){
+    stack<int> stackPF;
+    
+    istringstream iss(expration);
+    string term;
+    
+    while(iss >> term){
+        if (isdigit(term[0]) || (term[0] == '-' && isdigit(term[1]))) {
+            stackPF.push(stoi(term));
+        }else{
+            int operand1 = stackPF.top();
+            stackPF.pop();
+            int operand2 = stackPF.top();
+            stackPF.pop();
+            int result = performPostFix(term[0],operand1,operand2);
+            stackPF.push(result);
         }
     }
-
-    if (stack.size() == 1) {
-        return stack.pop();
-    } else {
-        throw runtime_error("Invalid postfix expression");
-    }
+    if (stackPF.size() <= 1)
+        return stackPF.top();
 }
 
-int main() {
-    string postfixExpression = "3 4 + 5 *";
-    int result = evaluatePostfix(postfixExpression);
-    cout << "Result of postfix expression " << postfixExpression << ": " << result << endl;
-
-    return 0;
+int main (){
+    string expration;
+    cout << "Enter an postfix : ";
+    cin >> expration;
+    
+    evaluatePostFix(expration);
 }
-
