@@ -1,5 +1,7 @@
 #include <iostream>
 #include <algorithm>
+#include <sstream>
+using namespace std;
 
 class AVLNode {
 public:
@@ -119,11 +121,11 @@ public:
 int main() {
     AVLTree avl;
 
-    avl.insert(10);
-    avl.insert(20);
-    avl.insert(30);
-    avl.insert(15);
-    avl.insert(5);
+    int seq[] = {5,6,8,7,0,5,7};
+    
+    for (int i=0; i<size(seq); i++) {
+        avl.insert(seq[i]);
+    }
 
     std::cout << "In-order traversal: ";
     avl.inOrder();
