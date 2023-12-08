@@ -15,7 +15,6 @@ private:
 public:
     CircularLinkedList() : head(nullptr) {}
 
-    // Insert an element in the list
     void insert(int data) {
         Node* new_node = new Node(data);
         if (!head) {
@@ -31,7 +30,6 @@ public:
         }
     }
 
-    // Remove an element from the list
     void remove(int data) {
         if (!head) {
             cout << "List is empty" << endl;
@@ -54,20 +52,19 @@ public:
         } else {
             Node* current = head;
             Node* prev = nullptr;
-            while (current->data != data && current->next != head) {
+            do {
+                if (current->data == data) {
+                    prev->next = current->next;
+                    delete current;
+                    return;
+                }
                 prev = current;
                 current = current->next;
-            }
-            if (current->data == data) {
-                prev->next = current->next;
-                delete current;
-            } else {
-                cout << data << " not found in the list" << endl;
-            }
+            } while (current != head);
+            cout << data << " not found in the list" << endl;
         }
     }
 
-    // Search for an element x in the list and return its pointer
     Node* search(int data) {
         if (!head) {
             return nullptr;
@@ -75,12 +72,12 @@ public:
         Node* current = head;
         do {
             if (current->data == data) {
-                cout << data<<" fount at address : "<< current << endl;
+                cout << data << " found at address: " << current << endl;
                 return current;
             }
             current = current->next;
         } while (current != head);
-        cout << data << " doesn't found !" << endl;
+        cout << data << " not found!" << endl;
         return nullptr;
     }
 
@@ -90,25 +87,63 @@ public:
         } else {
             Node* temp = head;
             do {
-                std::cout << temp->data << "->";
+                cout << temp->data << "->";
                 temp = temp->next;
             } while (temp != head);
-            cout <<"[head]"<< endl;
+            cout << "[head]" << endl;
         }
     }
 };
 
 int main() {
     CircularLinkedList cll;
-    cll.insert(1);
-    cll.insert(2);
-    cll.insert(3);
-    cll.display();
-    cll.search(4);
-    cll.search(2);
-    cout << "After remove 2" <<endl;
-    cll.remove(2);
-    cll.display();
+
+    int choice, data;
+
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Insert\n";
+        cout << "2. Remove\n";
+        cout << "3. Search\n";
+        cout << "4. Display\n";
+        cout << "5. Exit\n";
+
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter data to insert: ";
+                cin >> data;
+                cll.insert(data);
+                break;
+
+            case 2:
+                cout << "Enter data to remove: ";
+                cin >> data;
+                cll.remove(data);
+                break;
+
+            case 3:
+                cout << "Enter data to search: ";
+                cin >> data;
+                cll.search(data);
+                break;
+
+            case 4:
+                cout << "Circular Linked List: ";
+                cll.display();
+                break;
+
+            case 5:
+                cout << "Exiting program.\n";
+                break;
+
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+
+    } while (choice != 5);
 
     return 0;
 }
