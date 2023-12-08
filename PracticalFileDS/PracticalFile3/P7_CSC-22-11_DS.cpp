@@ -1,6 +1,6 @@
 #include <iostream>
-#include <algorithm>
 #include <sstream>
+#include <algorithm>
 using namespace std;
 
 class AVLNode {
@@ -120,15 +120,38 @@ public:
 
 int main() {
     AVLTree avl;
+    int choice, key;
 
-    int seq[] = {5,6,8,7,0,5,7};
-    
-    for (int i=0; i<size(seq); i++) {
-        avl.insert(seq[i]);
-    }
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Insert\n";
+        cout << "2. In-order Traversal\n";
+        cout << "3. Exit\n";
 
-    std::cout << "In-order traversal: ";
-    avl.inOrder();
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter key to insert: ";
+                cin >> key;
+                avl.insert(key);
+                break;
+
+            case 2:
+                cout << "In-order Traversal: ";
+                avl.inOrder();
+                break;
+
+            case 3:
+                cout << "Exiting program.\n";
+                break;
+
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+
+    } while (choice != 3);
 
     return 0;
 }
