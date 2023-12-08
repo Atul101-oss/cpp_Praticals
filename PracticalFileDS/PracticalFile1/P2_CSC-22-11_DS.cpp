@@ -26,7 +26,6 @@ private:
 public:
     DoublyLinkedList() : head(nullptr), tail(nullptr) {}
 
-    // Insert an element at the beginning of the doubly linked list
     void insert_at_beginning(int data) {
         Node* new_node = new Node(data);
         if (!head) {
@@ -39,7 +38,6 @@ public:
         }
     }
 
-    // Insert an element at the end of the doubly linked list
     void insert_at_end(int data) {
         Node* new_node = new Node(data);
         if (!head) {
@@ -52,7 +50,6 @@ public:
         }
     }
 
-    // Remove an element from the beginning of the doubly linked list
     void remove_from_beginning() {
         if (!head) {
             cout << "List is empty" << endl;
@@ -69,7 +66,6 @@ public:
         }
     }
 
-    // Remove an element from the end of the doubly linked list
     void remove_from_end() {
         if (!head) {
             cout << "List is empty" << endl;
@@ -95,25 +91,63 @@ public:
                 cout << current->data << "->";
                 current = current->next;
             }
-            cout <<"NULL"<< endl;
+            cout << "NULL" << endl;
         }
     }
 };
 
 int main() {
     DoublyLinkedList dll;
-    dll.insert_at_beginning(1);
-    dll.insert_at_end(2);
-    dll.insert_at_end(3);
-    dll.display();
 
-    dll.remove_from_beginning();
-    cout << "After removing from the beginning:" << endl;
-    dll.display();
+    int choice, data;
 
-    dll.remove_from_end();
-    cout << "After removing from the end:" << endl;
-    dll.display();
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Insert at beginning\n";
+        cout << "2. Insert at end\n";
+        cout << "3. Remove from beginning\n";
+        cout << "4. Remove from end\n";
+        cout << "5. Display\n";
+        cout << "6. Exit\n";
+
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter data to insert at the beginning: ";
+                cin >> data;
+                dll.insert_at_beginning(data);
+                break;
+
+            case 2:
+                cout << "Enter data to insert at the end: ";
+                cin >> data;
+                dll.insert_at_end(data);
+                break;
+
+            case 3:
+                dll.remove_from_beginning();
+                break;
+
+            case 4:
+                dll.remove_from_end();
+                break;
+
+            case 5:
+                cout << "Doubly Linked List: ";
+                dll.display();
+                break;
+
+            case 6:
+                cout << "Exiting program.\n";
+                break;
+
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+
+    } while (choice != 6);
 
     return 0;
 }
