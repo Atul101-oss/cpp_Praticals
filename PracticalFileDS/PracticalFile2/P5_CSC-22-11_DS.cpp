@@ -1,40 +1,38 @@
 #include <iostream>
+#include <stdexcept>
 using namespace std;
 
-class Node{
-    public:
+class Node {
+public:
     int data;
-    Node* next; 
-    Node(int value){
-        data = value;
-        next = nullptr;
-    }
+    Node* next;
+    Node(int value) : data(value), next(nullptr) {}
 };
 
-class Queue{
+class Queue {
 private:
     Node* front;
     Node* rear;
     size_t count;
 
 public:
-    Queue(): front(nullptr), rear(nullptr), count(0) {}
+    Queue() : front(nullptr), rear(nullptr), count(0) {}
 
-    void enqueue(int data){
+    void enqueue(int data) {
         Node* newNode = new Node(data);
 
-        if (isEmpty()){
+        if (isEmpty()) {
             front = rear = newNode;
-        }else{
+        } else {
             rear->next = newNode;
             rear = newNode;
         }
         count++;
     }
 
-    int dequeue(){
-        if (isEmpty()){
-            throw out_of_range("Queue id Empty!");
+    int dequeue() {
+        if (isEmpty()) {
+            throw out_of_range("Queue is Empty!");
         }
 
         int value = front->data;
@@ -43,65 +41,97 @@ public:
         delete temp;
         count--;
 
-        if(isEmpty()){
+        if (isEmpty()) {
             rear = front;
         }
 
         return value;
     }
 
-    // int search(int searchElement){
-    //     if (isEmpty){
-    //         throw out_of_range("Queue is Empty!");
-    //     }
-    //     int temp = front;
-    //     while (temp != nullptr && temp->data != searchElement){
-    //         temp = temp->next;
-    //     }
-        
-
-    // }
-
-    void display(){
+    void display() {
         Node* temp = front;
-        while (temp != nullptr){
-            cout << temp->data <<"-";
+        while (temp != nullptr) {
+            cout << temp->data << "-";
             temp = temp->next;
         }
-        cout << nullptr <<endl;
+        cout << "nullptr" << endl;
     }
 
-    bool isEmpty(){
+    bool isEmpty() {
         return count == 0;
     }
 
-    int peek(){
-        if (isEmpty()){
+    int peek() {
+        if (isEmpty()) {
             throw out_of_range("Queue is Empty!");
         }
         return front->data;
     }
 
-    int size(){
+    int size() {
         return count;
     }
 
 };
 
-int main(){
+int main() {
     Queue queue;
 
-    queue.enqueue(4);
-    queue.enqueue(3);
-    queue.enqueue(5);
+    int choice, data;
 
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Enqueue\n";
+        cout << "2. Dequeue\n";
+        cout << "3. Peek\n";
+        cout << "4. Display\n";
+        cout << "5. Size\n";
+        cout << "6. Exit\n";
 
-    cout <<"size of Queue : " <<queue.size() <<endl;
-    cout <<"front element : " <<queue.peek() <<endl;
-    cout <<"Queue         : ";  queue.display();
-    while(!queue.isEmpty()){
-        cout << queue.dequeue() <<endl;
-    }
-    cout <<"size of Queue : " <<queue.size() <<endl;
-    cout <<"front element : " <<queue.peek() <<endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter data to enqueue: ";
+                cin >> data;
+                queue.enqueue(data);
+                break;
+
+            case 2:
+                try {
+                    cout << "Dequeued element: " << queue.dequeue() << endl;
+                } catch (const exception& e) {
+                    cerr << "Error: " << e.what() << endl;
+                }
+                break;
+
+            case 3:
+                try {
+                    cout << "Front element: " << queue.peek() << endl;
+                } catch (const exception& e) {
+                    cerr << "Error: " << e.what() << endl;
+                }
+                break;
+
+            case 4:
+                cout << "Queue: ";
+                queue.display();
+                break;
+
+            case 5:
+                cout << "Size of Queue: " << queue.size() << endl;
+                break;
+
+            case 6:
+                cout << "Exiting program.\n";
+                break;
+
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+
+    } while (choice != 6);
+
+    return 0;
 }
