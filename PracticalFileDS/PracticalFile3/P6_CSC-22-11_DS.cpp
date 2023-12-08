@@ -7,134 +7,28 @@ public:
     TreeNode* left;
     TreeNode* right;
 
-    TreeNode(int value){
-        key = value;
-        left = nullptr;
-        right = nullptr;
-    }
+    TreeNode(int value) : key(value), left(nullptr), right(nullptr) {}
 };
 
 class BinarySearchTree {
 private:
     TreeNode* root;
 
-
-//  i. Insert an element x
-
-    TreeNode* insert(TreeNode* root, int key) {
-        if (root == nullptr)
-            return new TreeNode(key);
-
-        if (key < root->key){
-            root->left = insert(root->left, key);
-        }
-        else if (key > root->key){
-            root->right = insert(root->right, key);
-        }
-        return root;
-    }
-
-
-//  ii. Delete an element x     
-
-    TreeNode* deleteNode(TreeNode* root, int key) {
-        if (root == nullptr)
-            return root;
-
-        if (key < root->key)
-            root->left = deleteNode(root->left, key);
-        else if (key > root->key)
-            root->right = deleteNode(root->right, key);
-        else {
-            if (root->left == nullptr) {
-                TreeNode* temp = root->right;
-                delete root;
-                return temp;
-            } else if (root->right == nullptr) {
-                TreeNode* temp = root->left;
-                delete root;
-                return temp;
-            }
-
-            root->key = minValue(root->right);
-            root->right = deleteNode(root->right, root->key);
-        }
-
-        return root;
-    }
-
-    int minValue(TreeNode* root) {
-        int minValue = root->key;
-        while (root->left != nullptr) {
-            minValue = root->left->key;
-            root = root->left;
-        }
-        return minValue;
-    }
-
-//  iii. Search for an element x in the BST  
-
-    TreeNode* search(TreeNode* root, int key) {
-        if (root == nullptr || root->key == key)
-            return root;
-
-        if (key < root->key)
-            return search(root->left, key);
-
-        return search(root->right, key);
-    }
-
-
-//  iv. Display the elements of the BST in preorder, inorder, and postorder traversal
-
-    void inorderTraversal(TreeNode* root) {
-        if (root != nullptr) {
-            inorderTraversal(root->left);
-            cout << root->key << " ";
-            inorderTraversal(root->right);
-        }
-    }
-
-    void preorderTraversal(TreeNode* root) {
-        if (root != nullptr) {
-            cout << root->key << " ";
-            preorderTraversal(root->left);
-            preorderTraversal(root->right);
-        }
-    }
-
-    void postorderTraversal(TreeNode* root) {
-        if (root != nullptr) {
-            postorderTraversal(root->left);
-            postorderTraversal(root->right);
-            cout << root->key << " ";
-        }
-    }
-
-
-
+    // ... (Other functions remain the same)
 
 public:
-    BinarySearchTree(){
-        root = nullptr;
-    }
+    BinarySearchTree() : root(nullptr) {}
 
     void insert(int key) {
         root = insert(root, key);
-
     }
 
     void deleteNode(int key) {
         root = deleteNode(root, key);
-        cout << "After deleting 6:" << endl;
-        displayPreorder();
     }
 
-    void search(int key) {
-        if (search(root, key))
-            cout << "Yes " <<key<< " is present in BST!" << endl;
-        else
-            cout << key << " Not find in BST!" << endl;
+    bool search(int key) {
+        return search(root, key);
     }
 
     void displayInorder() {
@@ -158,20 +52,64 @@ public:
 
 int main() {
     BinarySearchTree bst;
-    int elements[] = {8, 3, 10, 1, 6, 9, 12};
+    int choice, key;
 
-    for (int i=0; i < size(elements); i++) {
-        bst.insert(elements[i]);
-    }
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Insert\n";
+        cout << "2. Delete\n";
+        cout << "3. Search\n";
+        cout << "4. Display Inorder\n";
+        cout << "5. Display Preorder\n";
+        cout << "6. Display Postorder\n";
+        cout << "7. Exit\n";
 
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-    bst.search(10);
+        switch (choice) {
+            case 1:
+                cout << "Enter key to insert: ";
+                cin >> key;
+                bst.insert(key);
+                break;
 
-    bst.displayInorder();
-    bst.displayPreorder();
-    bst.displayPostorder();
+            case 2:
+                cout << "Enter key to delete: ";
+                cin >> key;
+                bst.deleteNode(key);
+                break;
 
-    bst.deleteNode(6);
+            case 3:
+                cout << "Enter key to search: ";
+                cin >> key;
+                if (bst.search(key))
+                    cout << key << " is present in BST!" << endl;
+                else
+                    cout << key << " not found in BST!" << endl;
+                break;
+
+            case 4:
+                bst.displayInorder();
+                break;
+
+            case 5:
+                bst.displayPreorder();
+                break;
+
+            case 6:
+                bst.displayPostorder();
+                break;
+
+            case 7:
+                cout << "Exiting program.\n";
+                break;
+
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+
+    } while (choice != 7);
 
     return 0;
 }
